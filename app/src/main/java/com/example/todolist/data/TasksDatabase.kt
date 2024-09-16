@@ -26,7 +26,7 @@ abstract class TasksDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     TasksDatabase::class.java,
-                    "tasks_table"
+                    "tasks_database"
                 ).build()
                 INSTANCE = instance
                 return instance
