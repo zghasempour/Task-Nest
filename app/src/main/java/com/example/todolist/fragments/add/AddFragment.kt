@@ -62,6 +62,7 @@ class AddFragment : Fragment() {
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
 
+        binding.prioritiesSpinner.onItemSelectedListener = mSharedViewModel.listener
 
         return binding.root
     }
