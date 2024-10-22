@@ -14,7 +14,7 @@ import com.example.todolist.databinding.FragmentListBinding
 import com.example.todolist.databinding.RowLayoutBinding
 
 class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
-    var tasksList = emptyList<TasksData>()
+    private var tasksList = emptyList<TasksData>()
 
     class MyViewHolder(itemView: RowLayoutBinding) : RecyclerView.ViewHolder(itemView.root) {
         private val mBinding = itemView

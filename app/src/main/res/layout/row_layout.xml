@@ -22,8 +22,8 @@
             android:layout_height="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:backgroundTint="@color/red"
-            app:cardCornerRadius="16dp"
+            app:cardBackgroundColor="@color/red"
+            app:cardCornerRadius="100dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -54,8 +54,10 @@
             android:textColor="@color/darkGray"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/title_txt"
-            app:layout_constraintTop_toBottomOf="@+id/title_txt" />
+            app:layout_constraintTop_toBottomOf="@+id/title_txt"
+            app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

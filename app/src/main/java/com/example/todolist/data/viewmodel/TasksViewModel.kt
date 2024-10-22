@@ -14,14 +14,9 @@ class TasksViewModel(application: Application) : AndroidViewModel(application) {
 
     private val tasksDao = TasksDatabase.getDatabase(application).tasksDao()
 
-    private val repository:TasksRepository
+    private val repository:TasksRepository = TasksRepository(tasksDao)
 
-    private val getAllData : LiveData<List<TasksData>>
-
-    init {
-        repository = TasksRepository(tasksDao)
-        getAllData = repository.getAllData
-    }
+    val getAllData : LiveData<List<TasksData>> = repository.getAllData
 
     fun insertData(tasksData: TasksData){
         viewModelScope.launch(Dispatchers.IO) {

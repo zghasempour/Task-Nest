@@ -9,15 +9,22 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.MenuProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.R
+import com.example.todolist.data.viewmodel.TasksViewModel
 import com.example.todolist.databinding.FragmentListBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 
 class ListFragment : Fragment() {
+
+    private val mTasksViewModel: TasksViewModel by viewModels()
+    private val adapter : ListAdapter by lazy { ListAdapter() }
 
     private var _binding : FragmentListBinding? = null
     private val binding get() = _binding!!
@@ -27,6 +34,14 @@ class ListFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentListBinding.inflate(inflater,container, false)
+
+        val recyclerView = binding.recyclerView
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(requireActivity())
+
+        mTasksViewModel.getAllData.observe(viewLifecycleOwner, Observer { data->
+            adapter.setData(data)
+        })
 
         // Add MenuProvider to the hosting activity
         requireActivity().addMenuProvider(object : MenuProvider {
