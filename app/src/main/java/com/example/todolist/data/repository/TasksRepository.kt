@@ -19,4 +19,8 @@ class TasksRepository(private val tasksDao: TasksDao) {
     suspend fun deleteData(tasksData: TasksData){
         tasksDao.deleteData(tasksData)
     }
+
+    suspend fun deleteAllData(){
+        tasksDao.deleteAllData()
+    }
 }

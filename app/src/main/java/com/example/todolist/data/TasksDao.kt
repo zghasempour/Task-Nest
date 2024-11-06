@@ -23,4 +23,7 @@ interface TasksDao {
 
     @Delete
     suspend fun deleteData(tasksData: TasksData)
+
+    @Query("DELETE FROM tasks_table")
+    suspend fun deleteAllData()
 }
