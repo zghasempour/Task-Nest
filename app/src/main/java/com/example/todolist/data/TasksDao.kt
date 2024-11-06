@@ -2,9 +2,11 @@ package com.example.todolist.data
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.example.todolist.data.models.TasksData
 
 
@@ -15,4 +17,10 @@ interface TasksDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertData(tasksData: TasksData)
+
+    @Update
+    suspend fun updateData(tasksData: TasksData)
+
+    @Delete
+    suspend fun deleteData(tasksData: TasksData)
 }

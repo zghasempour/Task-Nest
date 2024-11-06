@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.core.content.ContextCompat
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todolist.R
 import com.example.todolist.data.TasksDao
@@ -22,6 +23,10 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
 
             mBinding.titleTxt.text = tasksData.title.toString()
             mBinding.descriptionTxt.text = tasksData.description.toString()
+            mBinding.rowBackground.setOnClickListener {
+                val action = ListFragmentDirections.actionListFragmentToUpdateFragment(tasksData)
+                 itemView.findNavController().navigate(action)
+            }
 
             when (tasksData.priority) {
                 Priority.HIGH -> mBinding.priorityIndicator.setBackgroundColor(

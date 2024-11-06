@@ -44,5 +44,11 @@
             android:id="@+id/action_updateFragment_to_listFragment"
             app:destination="@id/listFragment"
             app:enterAnim="@anim/from_left" />
+        <argument
+            android:name="currentItem"
+            app:argType="com.example.todolist.data.models.TasksData" />
     </fragment>
+    <argument
+        android:name="currentItem"
+        app:argType="com.example.todolist.data.models.TasksData" />
 </navigation>
