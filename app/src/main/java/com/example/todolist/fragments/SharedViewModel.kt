@@ -14,7 +14,7 @@ import com.example.todolist.data.models.TasksData
 
 class SharedViewModel(application: Application) : AndroidViewModel(application) {
 
-    val emptyDatabase : MutableLiveData<Boolean> = MutableLiveData(true)
+    val emptyDatabase : MutableLiveData<Boolean> = MutableLiveData(false)
 
     fun isDatabaseEmpty(tasksData: List<TasksData>)
     {
