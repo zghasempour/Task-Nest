@@ -13,6 +13,7 @@ constraintlayout = "2.2.0"
 navigation = "2.8.3"
 room = "2.6.1"
 ksp = "1.8.10-1.0.9"
+rvAnimation = "4.0.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -30,6 +31,7 @@ androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = 
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
+recyclereview-animator = { group = "jp.wasabeef", name = "recyclerview-animators", version.ref = "rvAnimation" }
 
 
 [plugins]

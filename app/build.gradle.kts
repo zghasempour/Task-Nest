@@ -57,7 +57,12 @@ dependencies {
     implementation(libs.kotlin.stdlib)
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
+
+    //RecycleView Animator
+    implementation(libs.recyclereview.animator)
+
     kapt(libs.androidx.room.compiler)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
