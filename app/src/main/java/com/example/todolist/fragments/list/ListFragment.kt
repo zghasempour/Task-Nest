@@ -14,14 +14,17 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.todolist.R
+import com.example.todolist.data.models.TasksData
 import com.example.todolist.data.viewmodel.TasksViewModel
 import com.example.todolist.databinding.FragmentListBinding
 import com.example.todolist.fragments.SharedViewModel
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-
+import com.example.todolist.fragments.list.adapter.ListAdapter
+import com.google.android.material.snackbar.Snackbar
+import com.example.todolist.fragments.list.SwipeToDelete as SwipeToDelete
 
 
 class ListFragment : Fragment() {
@@ -40,18 +43,19 @@ class ListFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentListBinding.inflate(inflater,container, false)
 
-        val recyclerView = binding.recyclerView
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(requireActivity())
+        binding.lifecycleOwner = this
+        binding.mSharedViewModel = mSharedViewModel
 
+        // Set up recyclerview
+        setUpRecyclerView()
+
+        //Observe LiveDate
         mTasksViewModel.getAllData.observe(viewLifecycleOwner, Observer { data->
             mSharedViewModel.isDatabaseEmpty(data)
             adapter.setData(data)
         })
 
-        mSharedViewModel.emptyDatabase.observe(viewLifecycleOwner, Observer {
-            showEmptyDatabaseView(it)
-        })
+
 
         // Add MenuProvider to the hosting activity
         requireActivity().addMenuProvider(object : MenuProvider {
@@ -77,23 +81,47 @@ class ListFragment : Fragment() {
         return binding.root
     }
 
-    private fun showEmptyDatabaseView(emptyDatabase: Boolean) {
-        if (emptyDatabase) {
-            binding.noDataImageView.visibility = View.VISIBLE
-            binding.noDataTextView.visibility = View.VISIBLE
+    private fun setUpRecyclerView() {
+        val recyclerView = binding.recyclerView
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(requireActivity())
+
+        // Swipe To Delete
+
+        swipeToDelete(recyclerView)
+    }
+
+    private fun swipeToDelete(recyclerView: RecyclerView){
+        val swipeToDeleteCallback = object : SwipeToDelete() {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val deletedItem = adapter.tasksList[viewHolder.adapterPosition]
+                // Delete Item
+                mTasksViewModel.deleteItem(deletedItem)
+                adapter.notifyItemRemoved(viewHolder.adapterPosition)
+
+                //Restore Item
+                restoreDeletedData(viewHolder.itemView,deletedItem,viewHolder.adapterPosition)
+            }
         }
-        else{
-            binding.noDataImageView.visibility = View.INVISIBLE
-            binding.noDataTextView.visibility = View.INVISIBLE
+        val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+    }
+
+    private fun restoreDeletedData(view: View, deletedItem:TasksData,position:Int){
+        val snackBar = Snackbar.make(
+           view, "Deleted '${deletedItem.title}'",
+            Snackbar.LENGTH_SHORT
+        )
+        snackBar.setAction("Undo"){
+            mTasksViewModel.insertData(deletedItem)
+            adapter.notifyItemChanged(position)
         }
+        snackBar.show()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.floatingBT.setOnClickListener {
-            findNavController().navigate(R.id.action_listFragment_to_addFragment)
-        }
     }
 
     private fun confirmDelete() {
@@ -112,5 +140,8 @@ class ListFragment : Fragment() {
         builder.create().show()
     }
 
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

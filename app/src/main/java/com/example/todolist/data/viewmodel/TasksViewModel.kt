@@ -30,7 +30,7 @@ class TasksViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun deleteData(tasksData: TasksData){
+    fun deleteItem(tasksData: TasksData){
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteData(tasksData)
         }

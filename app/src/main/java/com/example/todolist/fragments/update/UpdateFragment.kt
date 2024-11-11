@@ -37,9 +37,9 @@ class UpdateFragment : Fragment() {
 
         _binding = FragmentUpdateBinding.inflate(inflater, container, false)
 
-       binding.titleEt.setText(args.currentItem.title)
-       binding.descriptionEt.setText(args.currentItem.description)
-        binding.prioritiesSpinner.setSelection(mSharedViewModel.parsePriorityToInt(args.currentItem.priority))
+        binding.args = args
+
+
         binding.prioritiesSpinner.onItemSelectedListener = mSharedViewModel.listener
 
         requireActivity().addMenuProvider(object : MenuProvider{
@@ -97,7 +97,7 @@ class UpdateFragment : Fragment() {
         val builder = AlertDialog.Builder(requireContext())
 
         builder.setPositiveButton("Yes"){_,_ ->
-            mTasksViewModel.deleteData(args.currentItem)
+            mTasksViewModel.deleteItem(args.currentItem)
             Toast.makeText(requireContext(),
                 "Successfully Removed : ${args.currentItem.title}",
                 Toast.LENGTH_SHORT).show()
@@ -110,4 +110,8 @@ class UpdateFragment : Fragment() {
         builder.create().show()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding =null
+    }
 }
