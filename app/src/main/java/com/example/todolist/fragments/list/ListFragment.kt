@@ -8,9 +8,11 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.MenuProvider
+import androidx.core.view.get
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
@@ -28,7 +30,7 @@ import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import com.example.todolist.fragments.list.SwipeToDelete as SwipeToDelete
 
 
-class ListFragment : Fragment() {
+class ListFragment : Fragment(){
 
     private val mTasksViewModel: TasksViewModel by viewModels()
     private val mSharedViewModel: SharedViewModel by viewModels()
@@ -59,26 +61,48 @@ class ListFragment : Fragment() {
 
 
         // Add MenuProvider to the hosting activity
-        requireActivity().addMenuProvider(object : MenuProvider {
+        requireActivity().addMenuProvider(object : MenuProvider, SearchView.OnQueryTextListener {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 // Inflate your menu items here
                 menuInflater.inflate(R.menu.list_fragment_menu, menu)
+
+                val searchView = menu.findItem(R.id.menu_search).actionView as? SearchView
+                searchView?.isSubmitButtonEnabled = true
+                searchView?.setOnQueryTextListener(this)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 // Handle menu item selection
                 return when (menuItem.itemId) {
-                    R.id.menu_search -> {
-                        // Handle the menu item action
-                        true
-                    }R.id.delete_all -> {
+
+                    R.id.delete_all -> {
                         confirmDelete()
                         true
                     }
                     else -> false
                 }
             }
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query!= null)
+                {
+                    searchThroughDatabase(query)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                if (query!= null)
+                {
+                    searchThroughDatabase(query)
+                }
+                return true
+            }
+
+
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
+
         return binding.root
     }
 
@@ -149,5 +173,16 @@ class ListFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun searchThroughDatabase(query: String) {
+
+       val searchQuery = "%$query%"
+
+        mTasksViewModel.searchData(searchQuery).observe(this, Observer { list->
+            list?.let {
+                adapter.setData(it)
+            }
+        })
     }
 }

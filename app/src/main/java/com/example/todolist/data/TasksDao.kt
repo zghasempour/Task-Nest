@@ -26,4 +26,7 @@ interface TasksDao {
 
     @Query("DELETE FROM tasks_table")
     suspend fun deleteAllData()
+
+    @Query("SELECT * FROM tasks_table WHERE title LIKE :searchQuery" )
+    fun searchDatabase(searchQuery: String):LiveData<List<TasksData>>
 }

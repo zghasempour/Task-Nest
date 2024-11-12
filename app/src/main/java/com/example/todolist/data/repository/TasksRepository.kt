@@ -23,4 +23,8 @@ class TasksRepository(private val tasksDao: TasksDao) {
     suspend fun deleteAllData(){
         tasksDao.deleteAllData()
     }
+
+    fun searchDatabase(searchQuery:String): LiveData<List<TasksData>>{
+        return tasksDao.searchDatabase(searchQuery)
+    }
 }
