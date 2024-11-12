@@ -79,9 +79,18 @@ class ListFragment : Fragment(){
                         confirmDelete()
                         true
                     }
+                    R.id.menu_priority_high -> {
+                        mTasksViewModel.sortByHighPriority.observe(viewLifecycleOwner, Observer { adapter.setData(it) })
+                        true
+                    }
+                    R.id.menu_priority_low -> {
+                        mTasksViewModel.sortByLowPriority.observe(viewLifecycleOwner, Observer { adapter.setData(it) })
+                        true
+                    }
                     else -> false
                 }
             }
+
 
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query!= null)

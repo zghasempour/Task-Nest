@@ -17,6 +17,8 @@ class TasksViewModel(application: Application) : AndroidViewModel(application) {
     private val repository:TasksRepository = TasksRepository(tasksDao)
 
     val getAllData : LiveData<List<TasksData>> = repository.getAllData
+    val sortByHighPriority : LiveData<List<TasksData>> = repository.sortByHighPriority
+    val sortByLowPriority : LiveData<List<TasksData>> = repository.sortByLowPriority
 
     fun insertData(tasksData: TasksData){
         viewModelScope.launch(Dispatchers.IO) {
